@@ -74,6 +74,10 @@
             android:shadowDx="4"
             android:shadowDy="4"
             android:shadowRadius="8"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="12dp"
             android:visibility="gone" />
 
         <include
