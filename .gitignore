@@ -1,0 +1,19 @@
+# Gradle build outputs & caches
+.gradle/
+build/
+out/
+
+# Local configuration & environment
+local.properties
+.gradle-test-kit/
+
+# IDE / Editor configuration
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# OS specific files
+.DS_Store
+Thumbs.db
