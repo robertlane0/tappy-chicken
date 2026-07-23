@@ -274,7 +274,8 @@ class GameSurfaceView : SurfaceView, SurfaceHolder.Callback {
         canvas.drawRect(0f, groundVirtualY, screenW.toFloat(), groundVirtualY + 30f * scaleY, grassPaint)
 
         val grassStripW = 60f * scaleX
-        val offset = (groundOffset * scaleX) % grassStripW
+        val scrollPx = -(groundOffset * scaleX)
+        val offset = scrollPx % grassStripW
         val darkGrassPaint = Paint().apply { color = Color.rgb(34, 120, 60) }
         var gx = -offset
         while (gx < screenW) {
