@@ -10,4 +10,76 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <RelativeLayout
+        android:id="@+id/ui_overlay_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false">
+
+        <LinearLayout
+            android:id="@+id/layout_ready"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TAPPY CHICKEN"
+                android:textColor="#FFFFFF"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:shadowColor="#000000"
+                android:shadowRadius="10"
+                android:layout_marginBottom="20dp" />
+
+            <TextView
+                android:id="@+id/txt_tap_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TAP TO FLAP"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:shadowColor="#000000"
+                android:shadowRadius="10" />
+
+            <TextView
+                android:id="@+id/txt_high_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Best: 0"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:shadowColor="#000000"
+                android:shadowRadius="8"
+                android:layout_marginTop="16dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_live_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:text="0"
+            android:textSize="54sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:shadowColor="#000000"
+            android:shadowDx="4"
+            android:shadowDy="4"
+            android:shadowRadius="8"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/panel_game_over"
+            layout="@layout/panel_game_over"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 </FrameLayout>
