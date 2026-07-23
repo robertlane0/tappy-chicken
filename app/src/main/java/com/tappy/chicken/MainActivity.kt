@@ -74,6 +74,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        gameSurfaceView.onScoreChanged = { score ->
+            runOnUiThread {
+                textLiveScore.text = score.toString()
+            }
+        }
+
         btnRestart.setOnClickListener {
             gameSurfaceView.resetGame()
         }

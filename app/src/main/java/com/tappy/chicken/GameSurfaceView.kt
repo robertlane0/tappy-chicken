@@ -33,6 +33,7 @@ class GameSurfaceView : SurfaceView, SurfaceHolder.Callback {
         private set
 
     var onStateChanged: ((GameState, Int, Int) -> Unit)? = null
+    var onScoreChanged: ((Int) -> Unit)? = null
 
     private var scaleX: Float = 1f
     private var scaleY: Float = 1f
@@ -183,6 +184,7 @@ class GameSurfaceView : SurfaceView, SurfaceHolder.Callback {
                         pipe.passed = true
                         score++
                         soundManager?.playPoint()
+                        onScoreChanged?.invoke(score)
                     }
                 }
 
@@ -220,10 +222,6 @@ class GameSurfaceView : SurfaceView, SurfaceHolder.Callback {
         drawPipes(canvas)
         drawChicken(canvas)
         drawGround(canvas)
-
-        if (gameState == GameState.PLAYING) {
-            canvas.drawText(score.toString(), screenW / 2f, 100f * scaleY, scorePaint)
-        }
 
         if (flashAlpha > 0f) {
             flashPaint.alpha = (flashAlpha * 255).roundToInt()
@@ -380,6 +378,7 @@ class GameSurfaceView : SurfaceView, SurfaceHolder.Callback {
         groundOffset = 0f
         bgOffset = 0f
         score = 0
+        onScoreChanged?.invoke(0)
         setState(GameState.READY)
     }
 
