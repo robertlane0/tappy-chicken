@@ -56,8 +56,6 @@ class GameSurfaceView : SurfaceView, SurfaceHolder.Callback {
     private var wasPlaying: Boolean = false
 
     private var chickenBitmap: android.graphics.Bitmap? = null
-    private var pipeBodyBitmap: android.graphics.Bitmap? = null
-    private var pipeCapBitmap: android.graphics.Bitmap? = null
 
     private val skyPaint = Paint().apply { color = Color.rgb(135, 206, 235) }
     private val grassPaint = Paint().apply { color = Color.rgb(46, 139, 87) }
@@ -108,14 +106,6 @@ class GameSurfaceView : SurfaceView, SurfaceHolder.Callback {
             val cw = (chicken.visualWidth * scaleX).roundToInt()
             val ch = (chicken.visualHeight * scaleY).roundToInt()
             chickenBitmap = VectorCache.getBitmap(ctx, R.drawable.ic_chicken, cw, ch)
-
-            val pw = (PipePair.PIPE_WIDTH * scaleX).roundToInt()
-            val ph = (PipePair.PIPE_WIDTH * scaleY / scaleX).roundToInt()
-            pipeBodyBitmap = VectorCache.getBitmap(ctx, R.drawable.ic_pipe_body, pw, ph)
-
-            val capW = (200 * scaleX).roundToInt()
-            val capH = (60 * scaleY).roundToInt()
-            pipeCapBitmap = VectorCache.getBitmap(ctx, R.drawable.ic_pipe_cap, capW, capH)
         }
     }
 
@@ -289,36 +279,79 @@ class GameSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
     private fun drawPipes(canvas: Canvas) {
-        val bodyBmp = pipeBodyBitmap ?: return
-        val capBmp = pipeCapBitmap ?: return
-        val srcRect = android.graphics.Rect(0, 0, bodyBmp.width, bodyBmp.height)
+        val pipePaint = Paint()
+        val capPaint = Paint()
+        val borderPaint = Paint().apply {
+            color = Color.rgb(0x11, 0x33, 0x11)
+            strokeWidth = 4f * scaleX
+            style = Paint.Style.STROKE
+        }
 
         for (pipe in pipes) {
             val px = pipe.x * scaleX
             val pw = PipePair.PIPE_WIDTH * scaleX
-            val capH = capBmp.height.toFloat()
-            val capW = capBmp.width.toFloat()
+            val capW = 200f * scaleX
+            val capH = 60f * scaleY
             val capOverhang = (capW - pw) / 2f
 
             val topPipeBottom = pipe.topPipeBottom * scaleY
             val bottomPipeTop = pipe.bottomPipeTop * scaleY
 
+            pipePaint.shader = android.graphics.LinearGradient(
+                px, 0f, px + pw, 0f,
+                intArrayOf(
+                    Color.rgb(0x00, 0x64, 0x00),
+                    Color.rgb(0x32, 0xCD, 0x32),
+                    Color.rgb(0x00, 0x4d, 0x00)
+                ),
+                floatArrayOf(0f, 0.3f, 1f),
+                android.graphics.Shader.TileMode.CLAMP
+            )
+
             if (topPipeBottom > 0f) {
-                val dstTop = android.graphics.Rect(
-                    px.roundToInt(), 0,
-                    (px + pw).roundToInt(), topPipeBottom.roundToInt()
+                canvas.drawRect(px, 0f, px + pw, topPipeBottom, pipePaint)
+                canvas.drawRect(px, 0f, px + pw, topPipeBottom, borderPaint)
+
+                capPaint.shader = android.graphics.LinearGradient(
+                    px - capOverhang, 0f, px - capOverhang + capW, 0f,
+                    intArrayOf(
+                        Color.rgb(0x00, 0x64, 0x00),
+                        Color.rgb(0x32, 0xCD, 0x32),
+                        Color.rgb(0x00, 0x4d, 0x00)
+                    ),
+                    floatArrayOf(0f, 0.3f, 1f),
+                    android.graphics.Shader.TileMode.CLAMP
                 )
-                canvas.drawBitmap(bodyBmp, srcRect, dstTop, null)
-                canvas.drawBitmap(capBmp, px - capOverhang, topPipeBottom - capH, null)
+                canvas.drawRect(px - capOverhang, topPipeBottom - capH, px - capOverhang + capW, topPipeBottom, capPaint)
+                canvas.drawRect(px - capOverhang, topPipeBottom - capH, px - capOverhang + capW, topPipeBottom, borderPaint)
             }
 
             if (bottomPipeTop < GROUND_Y * scaleY) {
-                val dstBottom = android.graphics.Rect(
-                    px.roundToInt(), bottomPipeTop.roundToInt(),
-                    (px + pw).roundToInt(), (GROUND_Y * scaleY).roundToInt()
+                pipePaint.shader = android.graphics.LinearGradient(
+                    px, bottomPipeTop, px + pw, bottomPipeTop,
+                    intArrayOf(
+                        Color.rgb(0x00, 0x64, 0x00),
+                        Color.rgb(0x32, 0xCD, 0x32),
+                        Color.rgb(0x00, 0x4d, 0x00)
+                    ),
+                    floatArrayOf(0f, 0.3f, 1f),
+                    android.graphics.Shader.TileMode.CLAMP
                 )
-                canvas.drawBitmap(bodyBmp, srcRect, dstBottom, null)
-                canvas.drawBitmap(capBmp, px - capOverhang, bottomPipeTop, null)
+                canvas.drawRect(px, bottomPipeTop, px + pw, GROUND_Y * scaleY, pipePaint)
+                canvas.drawRect(px, bottomPipeTop, px + pw, GROUND_Y * scaleY, borderPaint)
+
+                capPaint.shader = android.graphics.LinearGradient(
+                    px - capOverhang, bottomPipeTop, px - capOverhang + capW, bottomPipeTop,
+                    intArrayOf(
+                        Color.rgb(0x00, 0x64, 0x00),
+                        Color.rgb(0x32, 0xCD, 0x32),
+                        Color.rgb(0x00, 0x4d, 0x00)
+                    ),
+                    floatArrayOf(0f, 0.3f, 1f),
+                    android.graphics.Shader.TileMode.CLAMP
+                )
+                canvas.drawRect(px - capOverhang, bottomPipeTop, px - capOverhang + capW, bottomPipeTop + capH, capPaint)
+                canvas.drawRect(px - capOverhang, bottomPipeTop, px - capOverhang + capW, bottomPipeTop + capH, borderPaint)
             }
         }
     }
