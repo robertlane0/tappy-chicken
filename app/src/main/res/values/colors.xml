@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sky_background">#87CEEB</color>
+    <color name="cloud_white">#F5F5F5</color>
+    <color name="cloud_highlight">#FFFFFF</color>
+    <color name="pipe_surface">#228B22</color>
+    <color name="pipe_highlight">#32CD32</color>
+    <color name="pipe_shadow">#006400</color>
+    <color name="ground_base">#D2B48C</color>
+    <color name="ground_grass">#2E8B57</color>
+    <color name="chicken_body">#FFD700</color>
+    <color name="chicken_wing">#FFA500</color>
+    <color name="chicken_beak">#FF4500</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+</resources>
