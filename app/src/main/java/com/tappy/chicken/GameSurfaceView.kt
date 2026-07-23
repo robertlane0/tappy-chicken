@@ -56,6 +56,9 @@ class GameSurfaceView : SurfaceView, SurfaceHolder.Callback {
     private var flashAlpha: Float = 0f
     private var wasPlaying: Boolean = false
 
+    @Volatile
+    private var pendingReset: Boolean = false
+
     private var chickenBitmap: android.graphics.Bitmap? = null
 
     private val skyPaint = Paint().apply { color = Color.rgb(135, 206, 235) }
@@ -144,6 +147,10 @@ class GameSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
     fun update(deltaTime: Float) {
+        if (pendingReset) {
+            pendingReset = false
+            doReset()
+        }
         if (flashAlpha > 0f) {
             flashAlpha = (flashAlpha - deltaTime / 0.15f).coerceAtLeast(0f)
         }
@@ -373,6 +380,10 @@ class GameSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
     fun resetGame() {
+        pendingReset = true
+    }
+
+    private fun doReset() {
         chicken.reset(CHICKEN_START_X, CHICKEN_START_Y)
         resetPipes()
         groundOffset = 0f
